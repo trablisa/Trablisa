@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ficha del Extintor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #2563eb; /* Blue */
+      --text: #111827;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      /* 🌟 Background Image */
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.9); /* semi-transparent white */
+      border-radius: 0.75rem;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.75rem;
+      color: var(--primary);
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    strong {
+      display: inline-block;
+      min-width: 160px;
+      font-weight: 600;
+      color: #374151;
+    }
+    .error {
+      color: #b91c1c;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ficha del Extintor</h1>
+    <div id="extintor-data">Cargando datos...</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const idParam = params.get("id");
+
+    if (!idParam) {
+      document.getElementById("extintor-data").innerHTML = '<p class="error">No se especificó ningún ID.</p>';
+    } else {
+      fetch("extintores.json")
+        .then(response => response.json())
+        .then(data => {
+          const record = data.find(item => item["Nº Id."] === idParam);
+          if (record) {
+            let html = "<ul>";
+            for (const [key, value] of Object.entries(record)) {
+              html += `<li><strong>${key}:</strong> ${value}</li>`;
+            }
+            html += "</ul>";
+            document.getElementById("extintor-data").innerHTML = html;
+          } else {
+            document.getElementById("extintor-data").innerHTML = '<p class="error">No se encontró ningún extintor con este ID.</p>';
+          }
+        })
+        .catch(error => {
+          document.getElementById("extintor-data").innerHTML = '<p class="error">Error al cargar los datos.</p>';
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
