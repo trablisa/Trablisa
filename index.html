@@ -81,7 +81,7 @@
       fetch("extintores.json")
         .then(response => response.json())
         .then(data => {
-          const record = data.find(item => item["Nº Id."] === idParam);
+          const record = data.find(item => item["ID"] === idParam);
           if (record) {
             let html = "<ul>";
             for (const [key, value] of Object.entries(record)) {
@@ -101,3 +101,4 @@
   </script>
 </body>
 </html>
+
